@@ -1,129 +1,30 @@
-// src/types/resume.ts
-
-export type ID = string;
-
-/* =========================
-   Root Resume Type
-========================= */
-
-export interface Resume {
-  basics?: Basics;
-  summary?: string;
-
-  experience?: Experience[];
-  education?: Education[];
-  projects?: Project[];
-  skills?: Skill[];
-  certifications?: Certification[];
-  achievements?: Achievement[];
-
-  metadata?: ResumeMetadata;
+export interface Skill {
+  id: string;
+  name: string;
 }
-
-/* =========================
-   Basics
-========================= */
-
-export interface Basics {
-  fullName?: string;
-  title?: string;
-  email?: string;
-  phone?: string;
-  location?: string;
-  website?: string;
-  linkedin?: string;
-  github?: string;
-}
-
-/* =========================
-   Experience
-========================= */
 
 export interface Experience {
-  id: ID;
-  role?: string;
-  company?: string;
-  location?: string;
-
-  startDate?: string; // YYYY-MM
-  endDate?: string;   // YYYY-MM | "Present"
-
-  highlights?: string[];
-}
-
-/* =========================
-   Education
-========================= */
-
-export interface Education {
-  id: ID;
-  degree?: string;
-  institution?: string;
-  location?: string;
-
+  id: string;
+  role: string;
+  company: string;
   startDate?: string;
   endDate?: string;
-
-  grade?: string;
-  highlights?: string[];
+  highlights: string[];
 }
 
-/* =========================
-   Projects
-========================= */
-
-export interface Project {
-  id: ID;
+export interface Resume {
   name?: string;
-  description?: string;
+  email?: string;
+  phone?: string;
 
-  technologies?: string[];
-  link?: string;
+  summary?: string;
 
-  highlights?: string[];
-}
+  skills: Skill[];
+  experience: Experience[];
 
-/* =========================
-   Skills
-========================= */
-
-export interface Skill {
-  id: ID;
-  name: string;
-  level?: "Beginner" | "Intermediate" | "Advanced" | "Expert";
-}
-
-/* =========================
-   Certifications
-========================= */
-
-export interface Certification {
-  id: ID;
-  name?: string;
-  issuer?: string;
-  date?: string;
-  link?: string;
-}
-
-/* =========================
-   Achievements
-========================= */
-
-export interface Achievement {
-  id: ID;
-  title?: string;
-  description?: string;
-  date?: string;
-}
-
-/* =========================
-   Metadata
-========================= */
-
-export interface ResumeMetadata {
-  createdAt?: string;
-  updatedAt?: string;
-
-  source?: "ai" | "manual" | "imported";
-  version?: number;
+  education?: {
+    degree?: string;
+    college?: string;
+    year?: string;
+  };
 }

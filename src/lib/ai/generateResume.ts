@@ -1,35 +1,44 @@
-import { Resume } from "@/types/resume";
+"use server";
 
+import Groq from "groq-sdk";
 
-export async function generateResumeFromPrompt(
-  userPrompt: string
-): Promise<Resume> {
-  // 🔒 TEMP MOCK (replace with OpenAI later)
-  const mockResponse = `
-  {
-    "basics": {
-      "fullName": "P. Akash",
-      "title": "Full Stack Web Developer",
-      "location": "Bengaluru, India",
-      "github": "github.com/Akash101202"
-    },
-    "summary": "Full stack developer with experience in MERN, Django, and AI-powered applications.",
-    "skills": [
-      { "id": "s1", "name": "JavaScript", "level": "Advanced" },
-      { "id": "s2", "name": "React", "level": "Advanced" }
-    ],
-    "metadata": {
-      "source": "ai",
-      "version": 1
-    }
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY,
+});
+
+export async function generateResumeAI(data: any) {
+  const prompt = `
+You are a resume generator.
+
+Return ONLY valid JSON. No explanation. No markdown.
+
+Format:
+{
+  "name": "",
+  "summary": "",
+  "skills": [],
+  "experience": [],
+  "education": {}
+}
+
+User input:
+${data.prompt}
+`;
+
+  const response = await groq.chat.completions.create({
+    model: "llama3-8b-8192",
+    messages: [{ role: "user", content: prompt }],
+  });
+
+  const text = response.choices[0].message.content || "";
+
+  try {
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error("No JSON found");
+
+    return JSON.parse(jsonMatch[0]);
+  } catch (err) {
+    console.error("AI RAW:", text);
+    throw new Error("Invalid AI JSON format");
   }
-  `;
-
-  // In real AI:
-  // send RESUME_SYSTEM_PROMPT + userPrompt
-  // receive response
-
-  const parsed: Resume = JSON.parse(mockResponse);
-
-  return parsed;
 }

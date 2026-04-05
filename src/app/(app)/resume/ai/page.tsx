@@ -7,7 +7,6 @@ import { gsap } from "gsap";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent } from "@/components/ui/card";
-import { generateResumeFromPrompt } from "@/lib/ai/generateResume";
 import { useResumeStore } from "@/lib/store/resumeStore";
 
 export default function AIResumePage() {
@@ -24,7 +23,6 @@ export default function AIResumePage() {
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      // Make sure elements are visible first
       gsap.set(".fade-item", { opacity: 1 });
 
       gsap.fromTo(
@@ -47,9 +45,25 @@ export default function AIResumePage() {
     try {
       setLoading(true);
 
-      const generated = await generateResumeFromPrompt(input);
-      setResume(generated);
+      // ✅ Call API instead of Groq directly
+      const res = await fetch("/api/generate-resume", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt: input }),
+      });
 
+      const parsed = await res.json();
+
+      if (!res.ok) {
+        throw new Error(parsed.error || "AI failed");
+      }
+
+      // ✅ Save to Zustand
+      setResume(parsed);
+
+      // ✅ Redirect
       router.push("/resume/preview");
     } catch (error) {
       console.error("Resume generation failed:", error);

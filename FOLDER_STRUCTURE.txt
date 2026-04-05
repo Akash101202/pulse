@@ -1,0 +1,207 @@
+Pulse - Project Folder Structure
+================================
+
+pulse/
+├── components.json
+├── eslint.config.mjs
+├── next-env.d.ts
+├── next.config.ts
+├── package.json
+├── postcss.config.mjs
+├── README.md
+├── tailwind.config.js
+├── tsconfig.json
+│
+├── public/
+│   ├── file.svg
+│   ├── globe.svg
+│   ├── next.svg
+│   ├── vercel.svg
+│   └── window.svg
+│
+├── src/
+│   │
+│   ├── app/
+│   │   ├── globals.css
+│   │   ├── layout.tsx
+│   │   ├── page.tsx
+│   │   ├── favicon.ico
+│   │   │
+│   │   ├── api/
+│   │   │   └── auth/
+│   │   │       ├── login/
+│   │   │       │   └── route.ts
+│   │   │       └── register/
+│   │   │           └── route.ts
+│   │   │
+│   │   ├── (app)/
+│   │   │   ├── layout.tsx
+│   │   │   ├── dashboard/
+│   │   │   │   └── page.tsx
+│   │   │   ├── jobs/
+│   │   │   │   └── page.tsx
+│   │   │   └── resume/
+│   │   │       ├── ai/
+│   │   │       │   └── page.tsx
+│   │   │       └── preview/
+│   │   │           └── page.tsx
+│   │   │
+│   │   ├── login/
+│   │   │   └── page.tsx
+│   │   │
+│   │   └── register/
+│   │       └── page.tsx
+│   │
+│   ├── components/
+│   │   ├── layout/
+│   │   │   ├── Appshell.tsx
+│   │   │   ├── Sidebar.tsx
+│   │   │   └── Topbar.tsx
+│   │   │
+│   │   ├── pdf/
+│   │   │   └── ResumeDocument.tsx
+│   │   │
+│   │   ├── resume/
+│   │   │   ├── ResumeEditorLayout.tsx
+│   │   │   ├── ResumeRenderer.tsx
+│   │   │   ├── sections/
+│   │   │   │   ├── ExperienceSection.tsx
+│   │   │   │   ├── HeaderSection.tsx
+│   │   │   │   ├── SkillsSection.tsx
+│   │   │   │   └── SummarySection.tsx
+│   │   │   └── templates/
+│   │   │       └── ModernTemplate.tsx
+│   │   │
+│   │   └── ui/
+│   │       ├── button.tsx
+│   │       ├── card.tsx
+│   │       ├── input.tsx
+│   │       └── textarea.tsx
+│   │
+│   ├── lib/
+│   │   ├── db.ts
+│   │   ├── mockResume.ts
+│   │   ├── systemPrompt.ts
+│   │   ├── utils.ts
+│   │   ├── ai/
+│   │   │   └── generateResume.ts
+│   │   └── store/
+│   │       └── resumeStore.ts
+│   │
+│   ├── models/
+│   │   └── User.ts
+│   │
+│   └── types/
+│       └── resume.ts
+│
+└── .next/
+    ├── dev/
+    │   ├── cache/
+    │   ├── server/
+    │   ├── static/
+    │   └── logs/
+    └── (build artifacts)
+
+
+FILE DESCRIPTIONS
+=================
+
+ROOT LEVEL FILES:
+─────────────────
+• components.json         → shadcn/ui components configuration
+• eslint.config.mjs      → ESLint configuration file
+• next-env.d.ts          → TypeScript definitions for Next.js
+• next.config.ts         → Next.js configuration
+• package.json           → Project dependencies and scripts
+• postcss.config.mjs     → PostCSS configuration (for Tailwind)
+• tailwind.config.js     → Tailwind CSS configuration
+• tsconfig.json          → TypeScript configuration
+
+
+PUBLIC FOLDER
+─────────────
+• SVG and image assets used in the application
+
+
+SRC/APP FOLDER (Next.js App Router)
+───────────────────────────────────
+• globals.css            → Global styles
+• layout.tsx             → Root layout component
+• page.tsx               → Home/landing page
+• favicon.ico            → Browser favicon
+
+API ROUTES:
+├── auth/login/route.ts   → Login endpoint
+└── auth/register/route.ts → Registration endpoint
+
+ROUTE GROUPS:
+(app) - Protected routes with shared layout
+├── (app)/layout.tsx           → Shared layout for protected pages
+├── dashboard/page.tsx         → User dashboard
+├── jobs/page.tsx              → Jobs listing page
+└── resume/
+    ├── ai/page.tsx           → AI-powered resume generation
+    └── preview/page.tsx      → Resume preview page
+
+AUTH PAGES (public):
+├── login/page.tsx        → Login page
+└── register/page.tsx     → Registration page
+
+
+SRC/COMPONENTS FOLDER
+─────────────────────
+layout/
+├── Appshell.tsx          → Main app shell/wrapper
+├── Sidebar.tsx           → Navigation sidebar
+└── Topbar.tsx            → Top navigation bar
+
+pdf/
+└── ResumeDocument.tsx    → PDF resume rendering component
+
+resume/
+├── ResumeEditorLayout.tsx → Editor layout container
+├── ResumeRenderer.tsx     → Resume display/preview
+├── sections/
+│   ├── ExperienceSection.tsx → Work experience form/display
+│   ├── HeaderSection.tsx     → Personal info section
+│   ├── SkillsSection.tsx     → Skills form/display
+│   └── SummarySection.tsx    → Professional summary section
+└── templates/
+    └── ModernTemplate.tsx    → Modern resume template design
+
+ui/ - Reusable UI Components
+├── button.tsx            → Button component
+├── card.tsx              → Card container component
+├── input.tsx             → Text input component
+└── textarea.tsx          → Textarea component
+
+
+SRC/LIB FOLDER (Utilities & Logic)
+──────────────────────────────────
+• db.ts                  → Database connection/queries
+• mockResume.ts          → Mock resume data for testing
+• systemPrompt.ts        → AI system prompts
+• utils.ts               → General utility functions
+
+ai/
+└── generateResume.ts    → AI-powered resume generation logic
+
+store/
+└── resumeStore.ts       → State management for resume data
+
+
+SRC/MODELS FOLDER
+─────────────────
+• User.ts                → User data model/schema
+
+
+SRC/TYPES FOLDER
+────────────────
+• resume.ts              → TypeScript types for resume structure
+
+
+.NEXT FOLDER (Build Output)
+────────────────────────────
+Auto-generated by Next.js during build/dev mode
+Contains compiled code, caches, and development artifacts
+
