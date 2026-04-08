@@ -111,9 +111,25 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* 🔥 FUTURE SECTION (Job Suggestions Placeholder) */}
-          <div className="rounded-2xl border p-6 text-center text-muted-foreground">
-            Job recommendations coming soon 🚀
+          {/* 🔥 JOBS CARD */}
+          <div className="rounded-2xl border bg-background/60 backdrop-blur-xl p-8 shadow-sm flex items-center justify-between">
+
+            <div>
+              <p className="text-lg font-semibold">
+                Find Jobs for You
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Get job recommendations based on your skills and experience.
+              </p>
+            </div>
+
+            <Link
+              href="/jobs"
+              className="inline-flex items-center rounded-xl bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-md transition-transform hover:scale-105"
+            >
+              View Jobs →
+            </Link>
+
           </div>
 
         </div>

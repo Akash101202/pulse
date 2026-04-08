@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Home, FileText, Briefcase } from "lucide-react";
+import { Home, FileText, Briefcase, Eye } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export default function Sidebar({ open }: { open: boolean }) {
@@ -17,17 +17,35 @@ export default function Sidebar({ open }: { open: boolean }) {
       </div>
 
       <nav className="p-3 space-y-1">
-        <NavItem href="/" icon={<Home size={18} />} label="Home" />
+
+        {/* Dashboard */}
         <NavItem
-          href="/resume/create/ai"
+          href="/dashboard"
+          icon={<Home size={18} />}
+          label="Dashboard"
+        />
+
+        {/* AI Resume */}
+        <NavItem
+          href="/resume/ai"
           icon={<FileText size={18} />}
           label="AI Resume"
         />
+
+        {/* Resume Preview / Edit */}
+        <NavItem
+          href="/resume/preview"
+          icon={<Eye size={18} />}
+          label="My Resume"
+        />
+
+        {/* Jobs */}
         <NavItem
           href="/jobs"
           icon={<Briefcase size={18} />}
           label="Jobs"
         />
+
       </nav>
     </aside>
   );
