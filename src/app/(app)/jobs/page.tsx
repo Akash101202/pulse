@@ -1,68 +1,101 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useResumeStore } from "@/lib/store/resumeStore";
+import gsap from "gsap";
+import JobCard from "@/components/jobs/JobCard";
 
 export default function JobsPage() {
-  const resume = useResumeStore((state) => state.resume);
   const [jobs, setJobs] = useState<any[]>([]);
+  const [query, setQuery] = useState("react");
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (!resume) return;
+const fetchJobs = async (searchQuery: string) => {
+  try {
+    setLoading(true);
 
-    const fetchJobs = async () => {
-      setLoading(true);
+    const res = await fetch(
+      `/api/jobs?skills=${encodeURIComponent(searchQuery)}`
+    );
 
-      const skills = resume.skills.map((s) => s.name);
+    if (!res.ok) {
+      console.error("API failed", res.status);
+      setJobs([]);
+      return;
+    }
 
-      const res = await fetch("/api/jobs", {
-        method: "POST",
-        body: JSON.stringify({ skills }),
-      });
+    const data = await res.json();
 
-      const data = await res.json();
+    console.log("FETCHED DATA:", data); // ✅ DEBUG
+
+    // 🔥 IMPORTANT FIX
+    if (Array.isArray(data)) {
       setJobs(data);
+    } else {
+      console.error("Not array:", data);
+      setJobs([]);
+    }
 
-      setLoading(false);
-    };
-
-    fetchJobs();
-  }, [resume]);
-
-  if (!resume) {
-    return <div className="p-10">No resume found</div>;
+  } catch (err) {
+    console.error("FETCH ERROR:", err);
+    setJobs([]);
+  } finally {
+    setLoading(false);
   }
+};
+
+useEffect(() => {
+  fetchJobs("react"); // 🔥 force load
+}, []);
+  // GSAP animation (FIXED)
+  useEffect(() => {
+    if (!jobs.length) return;
+
+    const ctx = gsap.context(() => {
+      gsap.from(".job-card", {
+        y: 40,
+        opacity: 0,
+        stagger: 0.1,
+        duration: 0.4,
+      });
+    });
+
+    return () => ctx.revert();
+  }, [jobs]);
 
   return (
-    <div className="max-w-5xl mx-auto p-10 space-y-6">
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-4">Find Jobs</h1>
 
-      <h1 className="text-2xl font-bold">Recommended Jobs</h1>
+      {/* Search */}
+      <div className="flex gap-2 mb-6">
+        <input
+          className="border p-2 w-full"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search skills (react, node...)"
+        />
 
+        <button
+          onClick={() => fetchJobs(query)}
+          className="bg-black text-white px-4"
+        >
+          Search
+        </button>
+      </div>
+
+      {/* Loading */}
       {loading && <p>Loading jobs...</p>}
 
-      {jobs.map((job, i) => (
-        <div
-          key={i}
-          className="border p-4 rounded-lg flex justify-between items-center"
-        >
-          <div>
-            <p className="font-semibold">{job.title}</p>
-            <p className="text-sm text-gray-500">
-              {job.company} • {job.location}
-            </p>
-          </div>
+      {/* Jobs */}
+      <div className="grid gap-4">
+        {!loading && jobs.length === 0 && (
+          <p>No jobs found</p>
+        )}
 
-          <a
-            href={job.link}
-            target="_blank"
-            className="text-blue-600"
-          >
-            Apply →
-          </a>
-        </div>
-      ))}
-
+        {jobs.map((job) => (
+          <JobCard key={job.id} job={job} />
+        ))}
+      </div>
     </div>
   );
 }
